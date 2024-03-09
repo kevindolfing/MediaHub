@@ -6,11 +6,6 @@ namespace MediaHub.API.Controllers;
 [Route("[controller]")]
 public class MediaController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
     private readonly ILogger<MediaController> _logger;
 
     public MediaController(ILogger<MediaController> logger)
