@@ -20,29 +20,16 @@ public class MediaService : IMediaService
 
     public IEnumerable<IMedia> GetMedia()
     {
-        var media = new List<IMedia>();
-        string[] entries = _fileSystem.Directory.GetFileSystemEntries(_rootPath);
-        //if directory add mediaFolder, if file add mediaFile
-        foreach (string entry in entries)
-        {
-            if (_fileSystem.Directory.Exists(entry))
-            {
-                media.Add(new MediaFolder
-                {
-                    Path = entry,
-                    Name = _fileSystem.Path.GetFileName(entry)
-                });
-            }
-            else
-            {
-                media.Add(new Media
-                {
-                    Path = entry,
-                    Name = _fileSystem.Path.GetFileName(entry)
-                });
-            }
-        }
-
-        return media;
+        return GetMedia(_rootPath);
+    }
+    
+    public IEnumerable<IMedia> GetMedia(string path)
+    {
+        if (!path.Contains(_rootPath))
+            throw new ArgumentException("Path is not in the root path");
+        return _fileSystem.Directory.GetFileSystemEntries(path).Select(entry =>
+            _fileSystem.Directory.Exists(entry)
+                ? new MediaFolder { Path = entry, Name = _fileSystem.Path.GetFileName(entry) }
+                : new Media { Path = entry, Name = _fileSystem.Path.GetFileName(entry) } as IMedia);
     }
 }

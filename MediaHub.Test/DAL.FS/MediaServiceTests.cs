@@ -61,4 +61,18 @@ public class MediaServiceTests
         // Act
         service.GetMedia();
     }
+
+    [TestMethod]
+    public void GetMedia_Path_Not_In_Root_Throws_ArgumentException_With_Message()
+    {
+        // Arrange
+        var mockFileSystem = new MockFileSystem();
+        var service = new MediaService(@"c:\root", mockFileSystem);
+
+        // Act
+        var ex = Assert.ThrowsException<ArgumentException>(() => service.GetMedia(@"c:\nonexistent"));
+
+        // Assert
+        Assert.AreEqual("Path is not in the root path", ex.Message);
+    }
 }
