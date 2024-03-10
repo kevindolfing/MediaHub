@@ -1,3 +1,5 @@
+using MediaHub.DAL.FS.Model;
+using MediaHub.DAL.FS.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediaHub.API.Controllers;
@@ -7,15 +9,18 @@ namespace MediaHub.API.Controllers;
 public class MediaController : ControllerBase
 {
     private readonly ILogger<MediaController> _logger;
+    private readonly IMediaService _mediaService;
 
-    public MediaController(ILogger<MediaController> logger)
+    public MediaController(ILogger<MediaController> logger, IMediaService mediaService)
     {
         _logger = logger;
+        _mediaService = mediaService;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public string Get()
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IEnumerable<IMedia> GetMedia()
     {
-        return "Hello World";
+        return _mediaService.GetMedia();
     }
 }
