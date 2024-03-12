@@ -10,12 +10,21 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+        <PackageReference Include="TestableIO.System.IO.Abstractions" Version="20.0.28" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MediaHub.DAL.FS\MediaHub.DAL.FS.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MediaHub.DAL.FS\MediaHub.DAL.FS.csproj" />
     </ItemGroup>
 
 </Project>
