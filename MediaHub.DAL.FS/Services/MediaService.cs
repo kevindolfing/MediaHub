@@ -12,6 +12,13 @@ public class MediaService : IMediaService
     {
         _rootPath = rootPath;
         _fileSystem = fileSystem;
+
+        if (!_fileSystem.Directory.Exists(_rootPath))
+        {
+            Console.WriteLine($"File system root path {_rootPath} does not exist. Creating it.");
+            _fileSystem.Directory.CreateDirectory(_rootPath);
+        }
+        
     }
 
     public MediaService(string rootPath) : this(rootPath, new FileSystem())

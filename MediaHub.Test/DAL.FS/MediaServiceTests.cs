@@ -51,18 +51,6 @@ public class MediaServiceTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(DirectoryNotFoundException))]
-    public void GetMedia_ThrowsDirectoryNotFoundException_WhenDirectoryDoesNotExist()
-    {
-        // Arrange
-        var mockFileSystem = new MockFileSystem();
-        var service = new MediaService(@"c:\nonexistent", mockFileSystem);
-
-        // Act
-        service.GetMedia();
-    }
-
-    [TestMethod]
     public void GetMedia_Path_Not_In_Root_Throws_ArgumentException_With_Message()
     {
         // Arrange
@@ -74,5 +62,19 @@ public class MediaServiceTests
 
         // Assert
         Assert.AreEqual("Path is not in the root path", ex.Message);
+    }
+
+    [TestMethod]
+    public void MediaSerivce_Creates_RootPath_When_It_Does_Not_Exist()
+    {
+        // Arrange
+        var mockFileSystem = new MockFileSystem();
+        var service = new MediaService(@"c:\nonexistent", mockFileSystem);
+
+        // Act
+        service.GetMedia();
+
+        // Assert
+        Assert.IsTrue(mockFileSystem.Directory.Exists(@"c:\nonexistent"));
     }
 }
