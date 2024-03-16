@@ -19,8 +19,8 @@ public class MediaController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IEnumerable<IMedia> GetMedia()
+    public IEnumerable<IMedia> GetMedia([FromQuery] string? path)
     {
-        return _mediaService.GetMedia();
+        return string.IsNullOrEmpty(path) ? _mediaService.GetMedia() : _mediaService.GetMedia(path);
     }
 }

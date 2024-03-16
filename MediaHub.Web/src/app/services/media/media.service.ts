@@ -14,7 +14,9 @@ export class MediaService {
 
   private endpoint = environment.BACKEND_URL;
 
-  public getMediaFolders(): Observable<MediaFolder[]> {
-    return this.httpClient.get<MediaFolder[]>(this.endpoint + "/media");
+  public getMediaFolders(path?: string): Observable<MediaFolder[]> {
+    const url = this.endpoint + "/media" + (path ? "?path=" + encodeURIComponent(path) : "");
+
+    return this.httpClient.get<MediaFolder[]>(url);
   }
 }

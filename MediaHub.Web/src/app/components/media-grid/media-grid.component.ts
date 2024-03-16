@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MediaService } from '../../services/media/media.service';
 import { MediaFolder } from '../../types/media.type';
 
@@ -12,9 +12,10 @@ import { MediaFolder } from '../../types/media.type';
 export class MediaGridComponent {
   constructor(private mediaService: MediaService) { }
 
+  @Input()
   public media: MediaFolder[] = [];
 
-  ngOnInit() {
-    this.mediaService.getMediaFolders().subscribe(folders => this.media = folders);
-  }
+  @Input()
+  public changePathCallBack: (path: string) => void = () => {};
+
 }

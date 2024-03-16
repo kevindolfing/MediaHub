@@ -14,9 +14,7 @@ describe('MediaGridComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [MediaGridComponent],
-      providers: [
-        { provide: MediaService, useValue: mediaService }
-      ]
+      providers: [{ provide: MediaService, useValue: mediaService }]
     })
       .compileComponents();
 
@@ -26,24 +24,5 @@ describe('MediaGridComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should populate media on init when media folders are returned', () => {
-    const mediaFolders: MediaFolder[] = [{name: 'Folder 1', path: '/folder1', children: []}];
-    (mediaService.getMediaFolders as jasmine.Spy).and.returnValue(of(mediaFolders));
-
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    expect(component.media).toEqual(mediaFolders);
-  });
-
-  it('should have empty media on init when no media folders are returned', () => {
-    (mediaService.getMediaFolders as jasmine.Spy).and.returnValue(of([]));
-
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    expect(component.media).toEqual([]);
   });
 });
