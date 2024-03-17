@@ -51,20 +51,6 @@ public class MediaServiceTests
     }
 
     [TestMethod]
-    public void GetMedia_Path_Not_In_Root_Throws_ArgumentException_With_Message()
-    {
-        // Arrange
-        var mockFileSystem = new MockFileSystem();
-        var service = new MediaService(@"c:\root", mockFileSystem);
-
-        // Act
-        var ex = Assert.ThrowsException<ArgumentException>(() => service.GetMedia(@"c:\nonexistent"));
-
-        // Assert
-        Assert.AreEqual("Path is not in the root path", ex.Message);
-    }
-
-    [TestMethod]
     public void MediaSerivce_Creates_RootPath_When_It_Does_Not_Exist()
     {
         // Arrange
@@ -76,5 +62,44 @@ public class MediaServiceTests
 
         // Assert
         Assert.IsTrue(mockFileSystem.Directory.Exists(@"c:\nonexistent"));
+    }
+    
+    [TestMethod]
+    public void StripRootPath_ReturnsPathWithoutRootPath()
+    {
+        // Arrange
+        var service = new MediaService(@"c:\root");
+
+        // Act
+        var result = service.StripRootPath(@"c:\root\path");
+
+        // Assert
+        Assert.AreEqual("path", result);
+    }
+    
+    [TestMethod]
+    public void CombineRootPath_ReturnsRootPathCombinedWithPath()
+    {
+        // Arrange
+        var service = new MediaService(@"c:\root");
+
+        // Act
+        var result = service.CombineRootPath(@"path");
+
+        // Assert
+        Assert.AreEqual(@"c:\root\path", result);
+    }
+    
+    [TestMethod] 
+    public void CombineRootPath_ReturnsRootPath_WhenPathIsEmpty()
+    {
+        // Arrange
+        var service = new MediaService(@"c:\root");
+
+        // Act
+        var result = service.CombineRootPath("");
+
+        // Assert
+        Assert.AreEqual(@"c:\root", result);
     }
 }

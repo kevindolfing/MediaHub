@@ -4,5 +4,5 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 .idea/
-
+MediaHub.API/media/
 MediaHub.sln.DotSettings.user

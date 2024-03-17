@@ -1,12 +1,23 @@
 using MediaHub.DAL.FS.Services;
 
-string rootPath = Environment.GetEnvironmentVariable("MEDIAHUB_ROOT_PATH") ?? Directory.GetCurrentDirectory() + "/media";
+string rootPath = Environment.GetEnvironmentVariable("MEDIAHUB_ROOT_PATH") ??
+                  Directory.GetCurrentDirectory() + "/media";
 
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowCors",
+        builder =>
+        {
+            builder.WithOrigins("*")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
+// Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -27,6 +38,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllowCors");
 
 app.Run();
 return;
