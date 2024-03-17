@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: MediaHub.Web docker image
 
 on:
   push:
