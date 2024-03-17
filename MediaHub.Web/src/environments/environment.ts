@@ -1,3 +1,3 @@
 export const environment = {
-  BACKEND_URL: "https://mediahub.kevda.dev",
+  BACKEND_URL: "https://api.mediahub.kevda.dev",
 };
