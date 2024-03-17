@@ -2,9 +2,7 @@ name: MediaHub.Web docker image
 
 on:
   push:
-    branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop", "main" ]
 
 jobs:
   push_to_registry:
