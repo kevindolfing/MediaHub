@@ -1,7 +1,6 @@
 using MediaHub.DAL.FS.Services;
 
-string rootPath = Environment.GetEnvironmentVariable("MEDIAHUB_ROOT_PATH") ??
-                  Directory.GetCurrentDirectory() + "/media";
+string rootPath = Directory.GetCurrentDirectory() + "/media";
 
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
