@@ -7,7 +7,6 @@ import { MediaFolder } from '../../types/media.type';
   standalone: true,
   imports: [],
   templateUrl: './media-grid.component.html',
-  styleUrl: './media-grid.component.scss'
 })
 export class MediaGridComponent {
   constructor(private mediaService: MediaService) { }

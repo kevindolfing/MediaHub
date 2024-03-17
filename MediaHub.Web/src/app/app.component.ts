@@ -8,7 +8,6 @@ import {MediaComponent} from "./components/media/media/media.component";
   standalone: true,
   imports: [RouterOutlet, MediaComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'MediaHub.Web';
