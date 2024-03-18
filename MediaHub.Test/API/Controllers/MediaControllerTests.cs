@@ -15,9 +15,9 @@ public class MediaControllerTests
         // Arrange
         var media = new List<IMedia>
         {
-            new MediaFolder { Name = "folder1" },
-            new Media { Name = "file1.txt" },
-            new Media { Name = "file2.txt" }
+            new Media { Name = "folder1", Path = "", Type = MediaType.DIRECTORY},
+            new Media { Name = "file1.txt", Path = "", Type = MediaType.FILE },
+            new Media { Name = "file2.txt", Path = "", Type = MediaType.FILE }
         };
         var mockService = new Mock<IMediaService>();
         mockService.Setup(service => service.GetMedia()).Returns(media);
@@ -36,9 +36,9 @@ public class MediaControllerTests
         // Arrange
         var media = new List<IMedia>
         {
-            new MediaFolder { Name = "folder1" },
-            new Media { Name = "file1.txt" },
-            new Media { Name = "file2.txt" }
+            new Media { Name = "folder1", Path = "", Type = MediaType.DIRECTORY},
+            new Media { Name = "file1.txt", Path = "", Type = MediaType.FILE },
+            new Media { Name = "file2.txt", Path = "", Type = MediaType.FILE }
         };
         var mockService = new Mock<IMediaService>();
         mockService.Setup(service => service.GetMedia("path")).Returns(media);

@@ -28,9 +28,9 @@ public class MediaServiceTests
 
         // Assert
         Assert.AreEqual(3, result.Count);
-        Assert.IsTrue(result.Any(media => media.Name == "folder1" && media is MediaFolder));
-        Assert.IsTrue(result.Any(media => media.Name == "file1.txt" && media is Media));
-        Assert.IsTrue(result.Any(media => media.Name == "file2.txt" && media is Media));
+        Assert.IsTrue(result.Any(media => media.Name == "folder1" && media.Type == MediaType.DIRECTORY));
+        Assert.IsTrue(result.Any(media => media.Name == "file1.txt" && media.Type == MediaType.FILE));
+        Assert.IsTrue(result.Any(media => media.Name == "file2.txt" && media.Type == MediaType.FILE));
     }
 
     [TestMethod]
@@ -101,5 +101,37 @@ public class MediaServiceTests
 
         // Assert
         Assert.AreEqual(@"c:\root", result);
+    }
+    
+    [TestMethod]
+    public void GetMediaFile_ReturnsFileInfo_WhenFileExists()
+    {
+        // Arrange
+        var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+        {
+            { @"c:\root\file.txt", new MockFileData("file") }
+        });
+        var service = new MediaService(@"c:\root", mockFileSystem);
+
+        // Act
+        var result = service.GetMediaFile("file.txt");
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual("file.txt", result.Name);
+    }
+    
+    [TestMethod]
+    public void GetMediaFile_ReturnsNull_WhenFileDoesNotExist()
+    {
+        // Arrange
+        var mockFileSystem = new MockFileSystem();
+        var service = new MediaService(@"c:\root", mockFileSystem);
+
+        // Act
+        var result = service.GetMediaFile("file.txt");
+
+        // Assert
+        Assert.IsNull(result);
     }
 }

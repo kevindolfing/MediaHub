@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MediaGridComponent} from "../../media-grid/media-grid.component";
-import {MediaFolder} from "../../../types/media.type";
+import {Media} from "../../../types/media.type";
 import {MediaService} from "../../../services/media/media.service";
 import {MediaBreadcrumbComponent} from "../breadcrumb/media-breadcrumb/media-breadcrumb.component";
 
@@ -13,8 +13,7 @@ import {MediaBreadcrumbComponent} from "../breadcrumb/media-breadcrumb/media-bre
 export class MediaComponent implements OnInit{
   currentPath: string = "";
 
-  media: MediaFolder[] = [];
-
+  media: Media[] = [];
   changedPathCallback = (path: string) => {
     this.pathChanged(path);
   }

@@ -1,5 +1,6 @@
-export type MediaFolder = {
+export type Media = {
   name: string;
   path: string;
-  children: MediaFolder[];
+  type: 0 | 1; // 0 = folder, 1 = file
+  children: Media[];
 };

@@ -6,4 +6,5 @@ public interface IMediaService
 {
     public IEnumerable<IMedia> GetMedia();
     public IEnumerable<IMedia> GetMedia(string path);
+    public FileInfo? GetMediaFile(string path);
 }

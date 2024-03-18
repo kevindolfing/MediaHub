@@ -34,10 +34,16 @@ public class MediaService : IMediaService
     {
         return _fileSystem.Directory.GetFileSystemEntries(CombineRootPath(path)).Select(entry =>
             _fileSystem.Directory.Exists(entry)
-                ? new MediaFolder { Path = StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry) }
-                : new Media { Path = StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry) } as IMedia);
+                ? new Media { Path = StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry), Type = MediaType.DIRECTORY}
+                : new Media { Path = StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry), Type = MediaType.FILE} as IMedia);
     }
-    
+
+    public FileInfo? GetMediaFile(string path)
+    {
+        string fullPath = CombineRootPath(path);
+        return _fileSystem.File.Exists(fullPath) ? new FileInfo(fullPath) : null;
+    }
+
     public string StripRootPath(string path)
     {
         string newPath = path.Replace(_rootPath, "");

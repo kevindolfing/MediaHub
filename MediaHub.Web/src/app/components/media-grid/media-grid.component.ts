@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { MediaService } from '../../services/media/media.service';
-import { MediaFolder } from '../../types/media.type';
+import {Component, Input} from '@angular/core';
+import {MediaService} from '../../services/media/media.service';
+import {Media} from '../../types/media.type';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-media-grid',
@@ -9,12 +10,23 @@ import { MediaFolder } from '../../types/media.type';
   templateUrl: './media-grid.component.html',
 })
 export class MediaGridComponent {
-  constructor(private mediaService: MediaService) { }
+  constructor(private mediaService: MediaService) {
+  }
 
   @Input()
-  public media: MediaFolder[] = [];
+  public media: Media[] = [];
 
   @Input()
-  public changePathCallBack: (path: string) => void = () => {};
+  public changePathCallBack: (path: string) => void = () => {
+  };
+
+  public handleClick(item: Media) {
+    if (item.type === 0) {
+      this.changePathCallBack(item.path);
+    } else {
+      window.open(environment.BACKEND_URL + '/media/file?path=' + item.path, '_blank');
+
+    }
+  }
 
 }

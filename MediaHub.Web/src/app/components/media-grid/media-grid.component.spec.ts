@@ -1,5 +1,3 @@
-import { of } from 'rxjs';
-import {MediaFolder} from "../../types/media.type";
 import {MediaGridComponent} from "./media-grid.component";
 import {ComponentFixture, TestBed} from "@angular/core/testing";
 import {MediaService} from "../../services/media/media.service";
