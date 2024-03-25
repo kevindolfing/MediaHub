@@ -1,0 +1,18 @@
+@if (auth.isAuthenticated$ | async) {
+  <div class="flex gap-5">
+    <div class="flex items-center">
+      <span class="font-medium text-lg mr-2">{{ (auth.user$ | async)?.name }}</span>
+    </div>
+    <button type="button"
+            class="text-white bg-rose-500 hover:bg-emerald-400 font-medium rounded-lg text-lg px-5 py-2.5"
+            (click)="auth.logout()"
+    >Log out
+    </button>
+  </div>
+} @else {
+  <button type="button"
+          class="text-white bg-emerald-400 hover:bg-rose-500 font-medium rounded-lg text-lg px-5 py-2.5"
+          (click)="auth.loginWithRedirect()"
+  >Login
+  </button>
+}
