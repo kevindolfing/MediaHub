@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.StaticFiles;
 namespace MediaHub.API.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize("read:media")]
 [Route("[controller]")]
 public class MediaController : ControllerBase
 {

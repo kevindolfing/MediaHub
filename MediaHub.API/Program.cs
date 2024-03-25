@@ -1,5 +1,7 @@
+using MediaHub.API.Auth;
 using MediaHub.DAL.FS.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.JsonWebTokens;
 
 string rootPath = Directory.GetCurrentDirectory() + "/media";
@@ -23,11 +25,20 @@ builder.Services.AddAuthentication(options =>
 
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+   
 }).AddJwtBearer(options =>
 {
     options.Authority = "https://dev-038ffj4bu8og0aq6.eu.auth0.com/";
     options.Audience = "https://mediahub.kevda.dev";
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("read:media", policy => policy.Requirements.Add(new 
+        HasScopeRequirement("read:media", "https://dev-038ffj4bu8og0aq6.eu.auth0.com/")));
+});
+
+builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
 // Add services to the container.
 builder.Services.AddControllers();
