@@ -4,4 +4,5 @@ export const environment = {
   OAUTH_CLIENT_ID: "Pd3MuifflSv4jEMmfoTRIhEES2ezxWfm",
   OAUTH_CALLBACK_URL: "https://mediahub.kevda.dev",
   OAUTH_LOGOUT_URL: "https://mediahub.kevda.dev",
+  OAUTH_AUDIENCE: "https://mediahub.kevda.dev",
 };

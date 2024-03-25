@@ -1,11 +1,13 @@
 using MediaHub.DAL.FS.Model;
 using MediaHub.DAL.FS.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 
 namespace MediaHub.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class MediaController : ControllerBase
 {
