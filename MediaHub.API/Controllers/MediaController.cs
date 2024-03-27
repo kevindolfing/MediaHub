@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.StaticFiles;
 namespace MediaHub.API.Controllers;
 
 [ApiController]
-[Authorize("read:media")]
 [Route("[controller]")]
 public class MediaController : ControllerBase
 {
@@ -21,6 +20,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize("read:media")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IEnumerable<IMedia> GetMedia([FromQuery] string? path)
     {
