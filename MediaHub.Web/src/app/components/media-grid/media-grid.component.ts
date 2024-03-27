@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {MediaService} from '../../services/media/media.service';
 import {Media} from '../../types/media.type';
 import {environment} from "../../../environments/environment";
+import {HttpUrlEncodingCodec} from "@angular/common/http";
 
 @Component({
   selector: 'app-media-grid',
@@ -24,7 +25,7 @@ export class MediaGridComponent {
     if (item.type === 0) {
       this.changePathCallBack(item.path);
     } else {
-      window.open(environment.BACKEND_URL + '/media/file?path=' + item.path, '_blank');
+      window.open(environment.BACKEND_URL + '/media/file?path=' + new HttpUrlEncodingCodec().encodeValue(item.path), '_blank');
 
     }
   }
