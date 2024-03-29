@@ -7,4 +7,6 @@ public interface IMedia
     public MediaType Type { get; set; }
     
     public IEnumerable<IMedia> Children { get; set; }
+    
+    public int ExtractNumericValueFromName();
 }

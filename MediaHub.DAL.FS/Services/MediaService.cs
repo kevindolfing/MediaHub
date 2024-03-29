@@ -18,7 +18,6 @@ public class MediaService : IMediaService
             Console.WriteLine($"File system root path {_rootPath} does not exist. Creating it.");
             _fileSystem.Directory.CreateDirectory(_rootPath);
         }
-        
     }
 
     public MediaService(string rootPath) : this(rootPath, new FileSystem())
@@ -29,13 +28,23 @@ public class MediaService : IMediaService
     {
         return GetMedia("");
     }
-    
+
     public IEnumerable<IMedia> GetMedia(string path)
     {
         return _fileSystem.Directory.GetFileSystemEntries(CombineRootPath(path)).Select(entry =>
-            _fileSystem.Directory.Exists(entry)
-                ? new Media { Path = StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry), Type = MediaType.DIRECTORY}
-                : new Media { Path = StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry), Type = MediaType.FILE} as IMedia);
+                _fileSystem.Directory.Exists(entry)
+                    ? new Media
+                    {
+                        Path = StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry),
+                        Type = MediaType.DIRECTORY
+                    }
+                    : new Media
+                    {
+                        Path = StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry), Type = MediaType.FILE
+                    } as IMedia)
+            .OrderBy(it => it.Type)
+            .ThenBy(it => it.ExtractNumericValueFromName())
+            .ThenBy(it => it.Name);
     }
 
     public FileInfo? GetMediaFile(string path)
@@ -50,7 +59,7 @@ public class MediaService : IMediaService
         newPath = newPath.StartsWith(_fileSystem.Path.DirectorySeparatorChar) ? newPath.Substring(1) : newPath;
         return newPath.Replace("\\", "/");
     }
-    
+
     public string CombineRootPath(string path)
     {
         return _fileSystem.Path.Combine(_rootPath, path);
