@@ -54,9 +54,9 @@ public class MediaThumbnailService : IMediaThumbnailService
         var mediaFiles = _fileSystem.Directory.GetFiles(_rootPath.Path, "*.*", SearchOption.AllDirectories)
             .Where(file => file.EndsWith(".mp4") || file.EndsWith(".mkv") );
 
-        Parallel.ForEach(mediaFiles, (mediaFile) =>
+        foreach (var mediaFile in mediaFiles)
         {
             ExtractThumbnail(_rootPath.StripRootPath(mediaFile)).Wait();
-        });
+        }
     }
 }
