@@ -35,8 +35,12 @@ public class MediaThumbnailService : IMediaThumbnailService
        // Construct the output thumbnail file path
        string thumbnailFilePath = _thumbnailPath.CombineRootPath(path + ".jpg");
 
-       // Extract the thumbnail at the 1st second of the video
-       IConversion conversion = await FFmpeg.Conversions.FromSnippet.Snapshot(mediaFilePath, thumbnailFilePath, TimeSpan.FromSeconds(1));
+       
+       // Extract the thumbnail halfway through the video
+
+       FFmpeg.GetMediaInfo(mediaFilePath).Wait();
+       var halfway = TimeSpan.FromSeconds(FFmpeg.GetMediaInfo(mediaFilePath).Result.Duration.TotalSeconds / 2);
+       IConversion conversion = await FFmpeg.Conversions.FromSnippet.Snapshot(mediaFilePath, thumbnailFilePath, halfway);
 
        // Start the conversion
        await conversion.Start();
