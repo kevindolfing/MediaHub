@@ -1,10 +1,12 @@
 using MediaHub.API.Auth;
 using MediaHub.DAL.FS.Services;
+using MediaHub.DAL.FS.Services.MediaPath;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.JsonWebTokens;
 
 string rootPath = Directory.GetCurrentDirectory() + "/media";
+string thumbnailPath = Directory.GetCurrentDirectory() + "/thumbnails";
 
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -56,6 +58,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+var mediaThumbnailService = app.Services.GetRequiredService<IMediaThumbnailService>();
+mediaThumbnailService.ExtractThumbnailsForMediaFolder();
+
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -69,5 +75,8 @@ return;
 
 void AddServices(IServiceCollection services)
 {
-    services.AddTransient<IMediaService, MediaService>(provider => new MediaService(rootPath));
+    services.AddTransient<RootPathService, RootPathService>(_ => new RootPathService(rootPath));
+    services.AddTransient<ThumbnailPathService, ThumbnailPathService>(_ => new ThumbnailPathService(thumbnailPath));
+    services.AddTransient<IMediaService, MediaService>();
+    services.AddTransient<IMediaThumbnailService, MediaThumbnailService>();
 }

@@ -1,26 +1,21 @@
 using System.IO.Abstractions;
 using MediaHub.DAL.FS.Model;
+using MediaHub.DAL.FS.Services.MediaPath;
 
 namespace MediaHub.DAL.FS.Services;
 
 public class MediaService : IMediaService
 {
-    private readonly string _rootPath;
+    private readonly IMediaPathService _mediaPathService;
     private readonly IFileSystem _fileSystem;
 
-    public MediaService(string rootPath, IFileSystem fileSystem)
+    public MediaService(RootPathService mediaPathService, IFileSystem fileSystem)
     {
-        _rootPath = rootPath;
+        _mediaPathService = mediaPathService;
         _fileSystem = fileSystem;
-
-        if (!_fileSystem.Directory.Exists(_rootPath))
-        {
-            Console.WriteLine($"File system root path {_rootPath} does not exist. Creating it.");
-            _fileSystem.Directory.CreateDirectory(_rootPath);
-        }
     }
 
-    public MediaService(string rootPath) : this(rootPath, new FileSystem())
+    public MediaService(RootPathService mediaPathService) : this(mediaPathService, new FileSystem())
     {
     }
 
@@ -31,16 +26,16 @@ public class MediaService : IMediaService
 
     public IEnumerable<IMedia> GetMedia(string path)
     {
-        return _fileSystem.Directory.GetFileSystemEntries(CombineRootPath(path)).Select(entry =>
+        return _fileSystem.Directory.GetFileSystemEntries(_mediaPathService.CombineRootPath(path)).Select(entry =>
                 _fileSystem.Directory.Exists(entry)
                     ? new Media
                     {
-                        Path = StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry),
+                        Path = _mediaPathService.StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry),
                         Type = MediaType.DIRECTORY
                     }
                     : new Media
                     {
-                        Path = StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry), Type = MediaType.FILE
+                        Path = _mediaPathService.StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry), Type = MediaType.FILE
                     } as IMedia)
             .OrderBy(it => it.Type)
             .ThenBy(it => it.ExtractNumericValueFromName())
@@ -49,19 +44,7 @@ public class MediaService : IMediaService
 
     public FileInfo? GetMediaFile(string path)
     {
-        string fullPath = CombineRootPath(path);
+        string fullPath = _mediaPathService.CombineRootPath(path);
         return _fileSystem.File.Exists(fullPath) ? new FileInfo(fullPath) : null;
-    }
-
-    public string StripRootPath(string path)
-    {
-        string newPath = path.Replace(_rootPath, "");
-        newPath = newPath.StartsWith(_fileSystem.Path.DirectorySeparatorChar) ? newPath.Substring(1) : newPath;
-        return newPath.Replace("\\", "/");
-    }
-
-    public string CombineRootPath(string path)
-    {
-        return _fileSystem.Path.Combine(_rootPath, path);
     }
 }
