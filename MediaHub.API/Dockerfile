@@ -19,4 +19,10 @@ RUN dotnet publish "MediaHub.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Install ffmpeg
+RUN apt-get update && \
+    apt-get install -y ffmpeg && \
+    rm -rf /var/lib/apt/lists/* \
+    
 ENTRYPOINT ["dotnet", "MediaHub.API.dll"]
