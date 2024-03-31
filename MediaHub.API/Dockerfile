@@ -23,6 +23,6 @@ COPY --from=publish /app/publish .
 # Install ffmpeg
 RUN apt-get update && \
     apt-get install -y ffmpeg && \
-    rm -rf /var/lib/apt/lists/* \
+    rm -rf /var/lib/apt/lists/*
     
 ENTRYPOINT ["dotnet", "MediaHub.API.dll"]
