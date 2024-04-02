@@ -57,9 +57,9 @@ public class MediaThumbnailService : IMediaThumbnailService
     public void ExtractThumbnailsForMediaFolder()
     {
         var mediaFiles = _fileSystem.Directory.GetFiles(_rootPath.Path, "*.*", SearchOption.AllDirectories)
+            .Select(_rootPath.StripRootPath)
             .Where(file => file.EndsWith(".mp4") || file.EndsWith(".mkv"))
-            .Where(file => !_fileSystem.File.Exists(_thumbnailPath.CombineRootPath(file + ".png")))
-            .Select(_rootPath.StripRootPath);
+            .Where(file => !_fileSystem.File.Exists(_thumbnailPath.CombineRootPath(file + ".png")));
         
         foreach (var mediaFile in mediaFiles)
         {
