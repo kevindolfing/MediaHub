@@ -17,7 +17,8 @@ public class MediaThumbnailService : IMediaThumbnailService
         _fileSystem = fileSystem;
     }
 
-    public MediaThumbnailService(RootPathService rootPath, ThumbnailPathService thumbnailPath) : this(rootPath, thumbnailPath,
+    public MediaThumbnailService(RootPathService rootPath, ThumbnailPathService thumbnailPath) : this(rootPath,
+        thumbnailPath,
         new FileSystem())
     {
     }
@@ -29,34 +30,33 @@ public class MediaThumbnailService : IMediaThumbnailService
 
     public async Task ExtractThumbnail(string path)
     {
-       // Construct the full path of the media file
-       string mediaFilePath = _rootPath.CombineRootPath(path);
+        var time = DateTime.Now;
+        // Construct the full path of the media file
+        string mediaFilePath = _rootPath.CombineRootPath(path);
 
-       // Construct the output thumbnail file path
-       string thumbnailFilePath = _thumbnailPath.CombineRootPath(path + ".jpg");
+        // Construct the output thumbnail file path
+        string thumbnailFilePath = _thumbnailPath.CombineRootPath(path + ".png");
 
-       
-       // Extract the thumbnail halfway through the video
+        // Extract the thumbnail halfway through the video
+        var halfway = TimeSpan.FromSeconds(FFmpeg.GetMediaInfo(mediaFilePath).Result.Duration.TotalSeconds / 2);
+        IConversion conversion =
+            await FFmpeg.Conversions.FromSnippet.Snapshot(mediaFilePath, thumbnailFilePath, halfway);
+        // Start the conversion
+        await conversion.Start();
 
-       FFmpeg.GetMediaInfo(mediaFilePath).Wait();
-       var halfway = TimeSpan.FromSeconds(FFmpeg.GetMediaInfo(mediaFilePath).Result.Duration.TotalSeconds / 2);
-       IConversion conversion = await FFmpeg.Conversions.FromSnippet.Snapshot(mediaFilePath, thumbnailFilePath, halfway);
-
-       // Start the conversion
-       await conversion.Start();
-
-       Console.WriteLine($"Thumbnail extracted for {path}");
-       
+        Console.WriteLine($"Thumbnail extracted for {path}");
     }
 
     public void ExtractThumbnailsForMediaFolder()
     {
         var mediaFiles = _fileSystem.Directory.GetFiles(_rootPath.Path, "*.*", SearchOption.AllDirectories)
-            .Where(file => file.EndsWith(".mp4") || file.EndsWith(".mkv") );
-
+            .Where(file => file.EndsWith(".mp4") || file.EndsWith(".mkv"))
+            .Where(file => !_fileSystem.File.Exists(_thumbnailPath.CombineRootPath(file + ".png")))
+            .Select(_rootPath.StripRootPath);
+        
         foreach (var mediaFile in mediaFiles)
         {
-            ExtractThumbnail(_rootPath.StripRootPath(mediaFile)).Wait();
+            ExtractThumbnail(mediaFile).Wait();
         }
     }
 }
