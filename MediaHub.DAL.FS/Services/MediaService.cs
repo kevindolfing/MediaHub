@@ -7,15 +7,19 @@ namespace MediaHub.DAL.FS.Services;
 public class MediaService : IMediaService
 {
     private readonly IMediaPathService _mediaPathService;
+    private readonly IMediaThumbnailService _mediaThumbnailService;
     private readonly IFileSystem _fileSystem;
 
-    public MediaService(RootPathService mediaPathService, IFileSystem fileSystem)
+    public MediaService(RootPathService mediaPathService, IMediaThumbnailService mediaThumbnailService,
+        IFileSystem fileSystem)
     {
         _mediaPathService = mediaPathService;
+        _mediaThumbnailService = mediaThumbnailService;
         _fileSystem = fileSystem;
     }
 
-    public MediaService(RootPathService mediaPathService) : this(mediaPathService, new FileSystem())
+    public MediaService(RootPathService mediaPathService, IMediaThumbnailService mediaThumbnailService) : this(
+        mediaPathService, mediaThumbnailService, new FileSystem())
     {
     }
 
@@ -31,11 +35,14 @@ public class MediaService : IMediaService
                     ? new Media
                     {
                         Path = _mediaPathService.StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry),
+                        ThumbnailUrl = _mediaThumbnailService.GetThumbnailPath(_mediaPathService.StripRootPath(entry)),
                         Type = MediaType.DIRECTORY
                     }
                     : new Media
                     {
-                        Path = _mediaPathService.StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry), Type = MediaType.FILE
+                        Path = _mediaPathService.StripRootPath(entry), Name = _fileSystem.Path.GetFileName(entry),
+                        ThumbnailUrl = _mediaThumbnailService.GetThumbnailPath(_mediaPathService.StripRootPath(entry)),
+                        Type = MediaType.FILE
                     } as IMedia)
             .OrderBy(it => it.Type)
             .ThenBy(it => it.ExtractNumericValueFromName())

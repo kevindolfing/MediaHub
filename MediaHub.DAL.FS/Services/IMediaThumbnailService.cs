@@ -2,7 +2,8 @@
 
 public interface IMediaThumbnailService
 {
-    public byte[] GetThumbnail(string path);
+    public byte[]? GetThumbnail(string path);
+    public string? GetThumbnailPath(string path);
     
     public Task ExtractThumbnail(string path);
     

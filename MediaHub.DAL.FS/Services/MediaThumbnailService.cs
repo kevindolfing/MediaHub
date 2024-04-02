@@ -23,9 +23,16 @@ public class MediaThumbnailService : IMediaThumbnailService
     {
     }
 
-    public byte[] GetThumbnail(string path)
+    public byte[]? GetThumbnail(string path)
     {
-        throw new NotImplementedException();
+        string thumbnailPath = _thumbnailPath.CombineRootPath(path + ".png");
+        return _fileSystem.File.Exists(thumbnailPath) ? _fileSystem.File.ReadAllBytes(thumbnailPath) : null;
+    }
+
+    public string? GetThumbnailPath(string path)
+    {
+        string thumbnailPath = _thumbnailPath.CombineRootPath(path + ".png");
+        return _fileSystem.File.Exists(thumbnailPath) ? path : null;
     }
 
     public async Task ExtractThumbnail(string path)

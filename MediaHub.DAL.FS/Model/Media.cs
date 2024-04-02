@@ -6,6 +6,7 @@ public partial class Media : IMedia
 {
     public required string Name { get; set; }
     public required string Path { get; set; }
+    public string? ThumbnailUrl { get; set; }
     public required MediaType Type { get; set; }
     public IEnumerable<IMedia> Children { get; set; }
 

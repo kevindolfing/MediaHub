@@ -12,11 +12,13 @@ public class MediaController : ControllerBase
 {
     private readonly ILogger<MediaController> _logger;
     private readonly IMediaService _mediaService;
+    private readonly IMediaThumbnailService _mediaThumbnailService;
 
-    public MediaController(ILogger<MediaController> logger, IMediaService mediaService)
+    public MediaController(ILogger<MediaController> logger, IMediaService mediaService, IMediaThumbnailService mediaThumbnailService)
     {
         _logger = logger;
         _mediaService = mediaService;
+        _mediaThumbnailService = mediaThumbnailService;
     }
 
     [HttpGet]
@@ -47,7 +49,20 @@ public class MediaController : ControllerBase
         Response.Headers["Content-Disposition"] = "inline; filename=" + file.Name;
         
         return result;
-
+    }
+    
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Route("thumbnail")]
+    public IActionResult GetThumbnail([FromQuery] string path)
+    {
+        var thumbnail = _mediaThumbnailService.GetThumbnail(path);
+        if (thumbnail == null)
+        {
+            return NotFound();
+        }
         
+        return File(thumbnail, "image/png");
     }
 }
