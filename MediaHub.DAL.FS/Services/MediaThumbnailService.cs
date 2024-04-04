@@ -25,13 +25,13 @@ public class MediaThumbnailService : IMediaThumbnailService
 
     public byte[]? GetThumbnail(string path)
     {
-        string thumbnailPath = _thumbnailPath.CombineRootPath(path + ".png");
+        string thumbnailPath = _thumbnailPath.CombineRootPath(path + ".webp");
         return _fileSystem.File.Exists(thumbnailPath) ? _fileSystem.File.ReadAllBytes(thumbnailPath) : null;
     }
 
     public string? GetThumbnailPath(string path)
     {
-        string thumbnailPath = _thumbnailPath.CombineRootPath(path + ".png");
+        string thumbnailPath = _thumbnailPath.CombineRootPath(path + ".webp");
         return _fileSystem.File.Exists(thumbnailPath) ? path : null;
     }
 
@@ -42,12 +42,14 @@ public class MediaThumbnailService : IMediaThumbnailService
         string mediaFilePath = _rootPath.CombineRootPath(path);
 
         // Construct the output thumbnail file path
-        string thumbnailFilePath = _thumbnailPath.CombineRootPath(path + ".png");
+        string thumbnailFilePath = _thumbnailPath.CombineRootPath(path + ".webp");
 
         // Extract the thumbnail halfway through the video
         var halfway = TimeSpan.FromSeconds(FFmpeg.GetMediaInfo(mediaFilePath).Result.Duration.TotalSeconds / 2);
         IConversion conversion =
-            await FFmpeg.Conversions.FromSnippet.Snapshot(mediaFilePath, thumbnailFilePath, halfway);
+            await FFmpeg.Conversions.FromSnippet.
+                Snapshot(mediaFilePath, thumbnailFilePath, halfway);
+        conversion.SetOutputFormat(Format.webp);
         // Start the conversion
         await conversion.Start();
 
@@ -59,7 +61,7 @@ public class MediaThumbnailService : IMediaThumbnailService
         var mediaFiles = _fileSystem.Directory.GetFiles(_rootPath.Path, "*.*", SearchOption.AllDirectories)
             .Select(_rootPath.StripRootPath)
             .Where(file => file.EndsWith(".mp4") || file.EndsWith(".mkv"))
-            .Where(file => !_fileSystem.File.Exists(_thumbnailPath.CombineRootPath(file + ".png")));
+            .Where(file => !_fileSystem.File.Exists(_thumbnailPath.CombineRootPath(file + ".webp")));
         
         foreach (var mediaFile in mediaFiles)
         {

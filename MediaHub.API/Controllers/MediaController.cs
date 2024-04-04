@@ -63,6 +63,6 @@ public class MediaController : ControllerBase
             return NotFound();
         }
         
-        return File(thumbnail, "image/png");
+        return File(thumbnail, "image/webp");
     }
 }
