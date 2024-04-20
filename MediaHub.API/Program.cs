@@ -1,6 +1,7 @@
 using MediaHub.API.Auth;
 using MediaHub.DAL.FS.Services;
 using MediaHub.DAL.FS.Services.MediaPath;
+using MediaHub.DAL.FS.Services.Thumbnail;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -79,4 +80,5 @@ void AddServices(IServiceCollection services)
     services.AddTransient<ThumbnailPathService, ThumbnailPathService>(_ => new ThumbnailPathService(thumbnailPath));
     services.AddTransient<IMediaService, MediaService>();
     services.AddTransient<IMediaThumbnailService, MediaThumbnailService>();
+    services.AddTransient<ThumbnailContext, ThumbnailContext>();
 }

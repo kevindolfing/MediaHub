@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions;
 using MediaHub.DAL.FS.Services.MediaPath;
+using MediaHub.DAL.FS.Services.Thumbnail;
 using Xabe.FFmpeg;
 
 namespace MediaHub.DAL.FS.Services;
@@ -8,17 +9,22 @@ public class MediaThumbnailService : IMediaThumbnailService
 {
     private readonly RootPathService _rootPath;
     private readonly ThumbnailPathService _thumbnailPath;
+    private readonly ThumbnailContext _thumbnailContext;
     private readonly IFileSystem _fileSystem;
 
-    public MediaThumbnailService(RootPathService rootPath, ThumbnailPathService thumbnailPath, IFileSystem fileSystem)
+    public MediaThumbnailService(RootPathService rootPath, ThumbnailPathService thumbnailPath,
+        ThumbnailContext thumbnailContext, IFileSystem fileSystem)
     {
         _rootPath = rootPath;
         _thumbnailPath = thumbnailPath;
+        _thumbnailContext = thumbnailContext;
         _fileSystem = fileSystem;
     }
 
-    public MediaThumbnailService(RootPathService rootPath, ThumbnailPathService thumbnailPath) : this(rootPath,
+    public MediaThumbnailService(RootPathService rootPath, ThumbnailPathService thumbnailPath,
+        ThumbnailContext thumbnailContext) : this(rootPath,
         thumbnailPath,
+        thumbnailContext,
         new FileSystem())
     {
     }
@@ -37,32 +43,17 @@ public class MediaThumbnailService : IMediaThumbnailService
 
     public async Task ExtractThumbnail(string path)
     {
-        var time = DateTime.Now;
-        // Construct the full path of the media file
-        string mediaFilePath = _rootPath.CombineRootPath(path);
-
-        // Construct the output thumbnail file path
-        string thumbnailFilePath = _thumbnailPath.CombineRootPath(path + ".webp");
-
-        // Extract the thumbnail halfway through the video
-        var halfway = TimeSpan.FromSeconds(FFmpeg.GetMediaInfo(mediaFilePath).Result.Duration.TotalSeconds / 2);
-        IConversion conversion =
-            await FFmpeg.Conversions.FromSnippet.
-                Snapshot(mediaFilePath, thumbnailFilePath, halfway);
-        conversion.SetOutputFormat(Format.webp);
-        // Start the conversion
-        await conversion.Start();
-
-        Console.WriteLine($"Thumbnail extracted for {path}");
+        await _thumbnailContext.ExtractThumbnail(path);
     }
 
     public void ExtractThumbnailsForMediaFolder()
     {
         var mediaFiles = _fileSystem.Directory.GetFiles(_rootPath.Path, "*.*", SearchOption.AllDirectories)
             .Select(_rootPath.StripRootPath)
-            .Where(file => file.EndsWith(".mp4") || file.EndsWith(".mkv"))
+            .Where(file =>
+                _thumbnailContext.SupportedExtensions.Contains(_fileSystem.Path.GetExtension(file).TrimStart('.')))
             .Where(file => !_fileSystem.File.Exists(_thumbnailPath.CombineRootPath(file + ".webp")));
-        
+
         foreach (var mediaFile in mediaFiles)
         {
             ExtractThumbnail(mediaFile).Wait();
