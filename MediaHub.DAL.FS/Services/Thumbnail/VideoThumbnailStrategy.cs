@@ -28,8 +28,6 @@ public class VideoThumbnailStrategy: ThumbnailStrategy
         conversion.SetOutputFormat(Format.webp);
         // Start the conversion
         await conversion.Start();
-
-        Console.WriteLine($"Thumbnail extracted for {path}");
     }
 
     public override IEnumerable<string> SupportedExtensions => new[] {"mkv", "mp4"};
