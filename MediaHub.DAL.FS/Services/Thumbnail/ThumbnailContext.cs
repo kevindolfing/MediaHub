@@ -13,7 +13,8 @@ public class ThumbnailContext
         var strategies = new List<IThumbnailStrategy>
         {
             new VideoThumbnailStrategy(rootPathService, thumbnailPathService, fileSystem),
-            new EpubThumbnailStrategy(rootPathService, thumbnailPathService, fileSystem)
+            new EpubThumbnailStrategy(rootPathService, thumbnailPathService, fileSystem),
+            new CBZThumbnailStrategy(rootPathService, thumbnailPathService, fileSystem)
         };
         
         foreach (IThumbnailStrategy strategy in strategies)
