@@ -18,14 +18,6 @@ public class EpubThumbnailStrategy : ThumbnailStrategy
 
     public override async Task ExtractThumbnail(string path)
     {
-        // open META-INF/container.xml
-        // find rootfile
-        // open rootfile as xml
-        // find first image in manifest
-        // open image
-        // convert to webp
-        // save to thumbnail path
-
         // Construct the full path of the media file
         string mediaFilePath = RootPath.CombineRootPath(path);
 

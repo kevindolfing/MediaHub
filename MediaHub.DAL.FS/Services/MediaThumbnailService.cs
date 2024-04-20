@@ -56,7 +56,15 @@ public class MediaThumbnailService : IMediaThumbnailService
 
         foreach (var mediaFile in mediaFiles)
         {
-            ExtractThumbnail(mediaFile).Wait();
+            try
+            {
+                ExtractThumbnail(mediaFile).Wait();
+                Console.WriteLine($"Extracted thumbnail for {mediaFile}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to extract thumbnail for {mediaFile}: {e.Message}");
+            }
         }
     }
 }

@@ -18,7 +18,6 @@ public class CBZThumbnailStrategy : ThumbnailStrategy
 
     public override async Task ExtractThumbnail(string path)
     {
-
         // Construct the full path of the media file
         string mediaFilePath = RootPath.CombineRootPath(path);
 
