@@ -14,10 +14,11 @@ public class ThumbnailHostedService : IHostedService
         _thumbnailService = thumbnailService;
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
         _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        await Loop(_cts.Token);
+        Loop(_cts.Token);
+        return Task.CompletedTask;
     }
 
     private async Task Loop(CancellationToken cancellationToken)
