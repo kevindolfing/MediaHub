@@ -30,8 +30,4 @@
       <ProjectReference Include="..\MediaHub.DAL.FS\MediaHub.DAL.FS.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="thumbnails\" />
-    </ItemGroup>
-
 </Project>
