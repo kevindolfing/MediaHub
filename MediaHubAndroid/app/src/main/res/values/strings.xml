@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">MediaHub.Android</string>
+    <string name="title_activity_media_catalog">MediaCatalog</string>
+    <string name="com_auth0_domain">dev-038ffj4bu8og0aq6.eu.auth0.com</string>
+    <string name="com_auth0_client_id">tyJn1bw9HhiQ97c3DkXWQrLIm5EqYsht</string>
+    <string name="com_auth0_scheme">demo</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="com_auth0_audience">https://mediahub.kevda.dev</string>
+    <string name="back_button">Back</string>
+    <string name="profile_button">Profile\n</string>
+    <string name="log_out">Log out</string>
+    <string name="title_activity_video_player">VideoPlayer</string>
+    <string name="api_url">https://api.mediahub.kevda.dev/</string>
+</resources>
