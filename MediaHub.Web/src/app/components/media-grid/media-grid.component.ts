@@ -22,7 +22,7 @@ export class MediaGridComponent {
   public media: Media[] = [];
 
   public getThumbnailUrl(item: Media) {
-    return item.thumbnailUrl ? environment.BACKEND_URL + "/media/thumbnail?path=" + new HttpUrlEncodingCodec().encodeValue(item.thumbnailUrl) : "https://placehold.co/600x400/FFF/000";
+    return item.thumbnailUrl ? environment.BACKEND_URL + "/media/thumbnail?path=" + new HttpUrlEncodingCodec().encodeValue(item.thumbnailUrl) : "assets/movie.png";
   }
 
   @Input()
