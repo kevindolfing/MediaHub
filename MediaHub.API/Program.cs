@@ -124,4 +124,6 @@ void AddServices(IServiceCollection services)
     services.AddTransient<ThumbnailContext, ThumbnailContext>();
 
     services.AddHostedService<ThumbnailHostedService>();
+
+    services.AddTransient<IStatisticsService, StatisticsService>();
 }

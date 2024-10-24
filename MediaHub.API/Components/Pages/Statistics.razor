@@ -1,0 +1,25 @@
+@page "/statistics"
+
+@using MediaHub.DAL.FS.Services
+@inject IStatisticsService StatisticsService
+
+<h3>Statistics</h3>
+
+<div>
+    <p>Number of Series: @seriesCount</p>
+    <p>Number of Episodes: @episodesCount</p>
+    <p>File System Usage: @fileSystemUsage</p>
+</div>
+
+@code {
+    private int seriesCount;
+    private int episodesCount;
+    private long fileSystemUsage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        seriesCount = await StatisticsService.GetNumberOfSeries();
+        episodesCount = await StatisticsService.GetNumberOfEpisodes();
+        fileSystemUsage = await StatisticsService.GetFileSystemUsage();
+    }
+}
